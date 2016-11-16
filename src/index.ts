@@ -1,14 +1,15 @@
-import * as http from 'http';
+import * as https from 'https';
 import * as debug from 'debug';
 
 import App from './App';
+import config from './config';
 
 debug('ts-express:server');
 
 const port = normalizePort(process.env.PORT || 3000);
 App.set('port', port);
 
-const server = http.createServer(App);
+const server = https.createServer(config, App);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
