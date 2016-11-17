@@ -2,6 +2,12 @@ import db from './db';
 import config from './../config';
 
 export default class User {
+  static async getAll() {
+    return await db.allDocs({
+      include_docs: true
+    });
+  }
+
   static async get(email) {
     return await db.get(email);
   }
