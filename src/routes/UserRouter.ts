@@ -20,8 +20,15 @@ class UserRouter {
     res.send(normalizedUsers);
   }
 
+  async addOne(req: Request, res: Response, next: NextFunction) {
+    const additionRes = await User.add(req.body);
+
+    res.send(additionRes);
+  }
+
   private init() {
     this.router.get('/', this.getAll);
+    this.router.post('/', this.addOne);
   }
 }
 

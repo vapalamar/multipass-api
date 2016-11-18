@@ -12,6 +12,7 @@ class App {
     this.express = express();
     this.middleware();
     this.routes();
+    this.errors();
   }
 
   private middleware(): void {
@@ -31,6 +32,22 @@ class App {
 
     this.express.use('/', router);
     this.express.use('/api/users', UserRouter);
+  }
+
+  private errors() {
+    this.express.use((req, res, next) => {
+      res.status(404).send({
+        status: res.statusCode,
+        message: `${req.url} not found.`
+      });
+    });
+
+    this.express.use((req, res, next) => {
+      res.status(500).send({
+        status: res.statusCode,
+        message: 'Something very strange happened.'
+      });
+    });
   }
 }
 
