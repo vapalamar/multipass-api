@@ -7,7 +7,7 @@ export default class User {
     });
   }
 
-  static async get(email) {
+  static async get(email: string) {
     const users = await User.getAll();
     const user = users.rows.find(row => row.doc['email'] === email);
 
@@ -20,15 +20,7 @@ export default class User {
     const user = await User.get(data.email);
 
     if (user) {
-      const updatedUser = {
-        _id: user._id,
-        _rev: user['_rev'],
-        email: data.email,
-        name: data.name || user['name'],
-        pass: data.pass || user['pass']
-      };
-
-      Object.assign(user, updatedUser);
+      Object.assign(user, data);
 
       return await db.put(user);
     }
