@@ -11,24 +11,40 @@ class UserRouter {
 
   async getAll(req: Request, res: Response, next: NextFunction) {
     const data = await User.getAll();
-    const normalizedUsers = data.rows.map(row => {
-      return {
-        email: row.id
-      };
-    });
 
-    res.send(normalizedUsers);
+    res.send(data);
   }
 
-  async addOne(req: Request, res: Response, next: NextFunction) {
+  async get(req: Request, res: Response, next: NextFunction) {
+    const data = await User.get(req.params.email);
+
+    res.send(data);
+  }
+
+  async add(req: Request, res: Response, next: NextFunction) {
     const additionRes = await User.add(req.body);
 
     res.send(additionRes);
   }
 
+  async update(req: Request, res: Response, next: NextFunction) {
+    const updateRes = await User.update(req.body);
+
+    res.send(updateRes);
+  }
+
+  async delete(req: Request, res: Response, next: NextFunction) {
+    const deleteRes = await User.del(req.body.email);
+
+    res.send(deleteRes);
+  }
+
   private init() {
     this.router.get('/', this.getAll);
-    this.router.post('/', this.addOne);
+    this.router.get('/:email', this.get);
+    this.router.delete('/', this.delete);
+    this.router.put('/', this.update);
+    this.router.post('/', this.add);
   }
 }
 

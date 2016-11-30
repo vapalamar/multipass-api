@@ -1,5 +1,4 @@
 import db from './db';
-import config from './../config';
 
 export default class User {
   static async getAll() {
@@ -9,27 +8,45 @@ export default class User {
   }
 
   static async get(email) {
-    return await db.get(email);
+    const users = await User.getAll();
+    const user = users.rows.find(row => row.doc['email'] === email);
+
+    if (user) {
+      return user.doc;
+    }
   }
 
   static async update(data) {
     const user = await User.get(data.email);
-    const updatedUser = {
-      _id: data.email,
-      name: data.name,
-      pass: data.pass
-    };
 
-    Object.assign(user, updatedUser);
+    if (user) {
+      const updatedUser = {
+        _id: user._id,
+        _rev: user['_rev'],
+        email: data.email,
+        name: data.name || user['name'],
+        pass: data.pass || user['pass']
+      };
 
-    return await db.put(user);
+      Object.assign(user, updatedUser);
+
+      return await db.put(user);
+    }
   }
 
   static async add(data) {
-    return await db.put({
-      _id: data.email,
-      name: data.name,
-      pass: data.pass
-    });
+    const user = await User.get(data.email);
+
+    if (!user) {
+      return await db.post(data);
+    }
+  }
+
+  static async del(email) {
+    const user = await User.get(email);
+
+    if (user) {
+      return await db.remove(user);
+    }
   }
 }
