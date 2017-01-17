@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
+import * as favicon from 'serve-favicon';
 
 import UserRouter from './routes/UserRouter';
 import LockRouter from './routes/LockRouter';
@@ -21,6 +22,7 @@ class App {
     this.express.use(logger('dev'));
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));
+    this.express.use(favicon(__dirname + '/../src/favicon.png'));
   }
 
   private routes(): void {
