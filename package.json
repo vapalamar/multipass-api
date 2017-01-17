@@ -4,7 +4,7 @@
   "description": "API for retrieving and processing Multipass project data.",
   "main": "dist/index.js",
   "scripts": {
-    "postinstall": "gulp scripts",
+    "postinstall": "node_modules/.bind/gulp scripts",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

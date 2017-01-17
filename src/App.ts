@@ -24,6 +24,13 @@ class App {
   }
 
   private routes(): void {
+    const router = express.Router();
+    router.get('/', (req, res, next) => {
+      res.json({
+        message: 'Hello World'
+      });
+    });
+
     this.express.use('/api/users', UserRouter);
     this.express.use('/api/locks', LockRouter);
     this.express.use('/api/keys', KeyRouter);
