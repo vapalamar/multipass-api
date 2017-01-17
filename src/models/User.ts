@@ -2,22 +2,25 @@ import db from './db';
 
 export default class User {
   static async getAll() {
-    return await db.allDocs({
-      include_docs: true
-    });
+    const users = await (db as any).query('users/all');
+
+    return users.rows;
   }
 
-  static async get(email: string) {
-    const users = await User.getAll();
-    const user = users.rows.find(row => row.doc['email'] === email);
+  static async get(nickname: string) {
+    try {
+      const user = await (db as any).query('users/all', { key: nickname });
 
-    if (user) {
-      return user.doc;
+      if (user.rows.length) {
+        return user.rows[0].value;
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
   static async update(data) {
-    const user = await User.get(data.email);
+    const user = await User.get(data.nickname);
 
     if (user) {
       Object.assign(user, data);
@@ -27,15 +30,15 @@ export default class User {
   }
 
   static async add(data) {
-    const user = await User.get(data.email);
+    const user = await User.get(data.nickname);
 
     if (!user) {
       return await db.post(data);
     }
   }
 
-  static async del(email) {
-    const user = await User.get(email);
+  static async del(nickname: string) {
+    const user = await User.get(nickname);
 
     if (user) {
       return await db.remove(user);

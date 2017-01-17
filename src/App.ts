@@ -4,6 +4,8 @@ import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 
 import UserRouter from './routes/UserRouter';
+import LockRouter from './routes/LockRouter';
+import KeyRouter from './routes/KeyRouter';
 
 class App {
   public express: express.Application;
@@ -22,16 +24,9 @@ class App {
   }
 
   private routes(): void {
-    const router = express.Router();
-
-    router.get('/', (req, res, next) => {
-      res.json({
-        message: 'Hello World'
-      });
-    });
-
-    this.express.use('/', router);
     this.express.use('/api/users', UserRouter);
+    this.express.use('/api/locks', LockRouter);
+    this.express.use('/api/keys', KeyRouter);
   }
 
   private errors() {

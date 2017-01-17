@@ -16,7 +16,7 @@ class UserRouter {
   }
 
   async get(req: Request, res: Response, next: NextFunction) {
-    const data = await User.get(req.params.email);
+    const data = await User.get(req.params.nickname);
 
     res.send(data);
   }
@@ -34,14 +34,14 @@ class UserRouter {
   }
 
   async delete(req: Request, res: Response, next: NextFunction) {
-    const deleteRes = await User.del(req.body.email);
+    const deleteRes = await User.del(req.body.nickname);
 
     res.send(deleteRes);
   }
 
   private init() {
     this.router.get('/', this.getAll);
-    this.router.get('/:email', this.get);
+    this.router.get('/:nickname', this.get);
     this.router.delete('/', this.delete);
     this.router.put('/', this.update);
     this.router.post('/', this.add);
